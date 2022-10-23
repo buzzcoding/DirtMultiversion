@@ -22,9 +22,18 @@
 
 package com.github.dirtpowered.dirtmv;
 
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import org.pmw.tinylog.Logger;
+
 import com.github.dirtpowered.dirtmv.api.Configuration;
 import com.github.dirtpowered.dirtmv.config.YamlConfig;
 import com.github.dirtpowered.dirtmv.data.MinecraftVersion;
+import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_2.V1_2BProtocol;
 import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_3.V1_3BProtocol;
 import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_4.V1_4BProtocol;
 import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_5.V1_5BProtocol;
@@ -51,6 +60,7 @@ import com.github.dirtpowered.dirtmv.network.versions.Beta11To10.ProtocolBeta11T
 import com.github.dirtpowered.dirtmv.network.versions.Beta13To11.ProtocolBeta13To11;
 import com.github.dirtpowered.dirtmv.network.versions.Beta14To13.ProtocolBeta14To13;
 import com.github.dirtpowered.dirtmv.network.versions.Beta17To14.ProtocolBeta17to14;
+import com.github.dirtpowered.dirtmv.network.versions.Beta9To8.ProtocolBeta9To8;
 import com.github.dirtpowered.dirtmv.network.versions.Release22To17.ProtocolRelease22To17;
 import com.github.dirtpowered.dirtmv.network.versions.Release23To22.ProtocolRelease23To22;
 import com.github.dirtpowered.dirtmv.network.versions.Release28To23.ProtocolRelease28To23;
@@ -68,16 +78,10 @@ import com.github.dirtpowered.dirtmv.session.MultiSession;
 import com.github.dirtpowered.dirtmv.session.SessionRegistry;
 import com.github.dirtpowered.dirtmv.viaversion.ViaPlugin;
 import com.google.gson.Gson;
+
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import lombok.Getter;
-import org.pmw.tinylog.Logger;
-
-import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 @Getter
 public class DirtMultiVersion implements Runnable {
@@ -102,6 +106,7 @@ public class DirtMultiVersion implements Runnable {
         sessionRegistry = new SessionRegistry();
 
         // register supported protocols
+        ProtocolRegistry.registerProtocol(MinecraftVersion.B1_2, new V1_2BProtocol());
         ProtocolRegistry.registerProtocol(MinecraftVersion.B1_3, new V1_3BProtocol());
         ProtocolRegistry.registerProtocol(MinecraftVersion.B1_4, new V1_4BProtocol());
         ProtocolRegistry.registerProtocol(MinecraftVersion.B1_5, new V1_5BProtocol());
@@ -142,6 +147,7 @@ public class DirtMultiVersion implements Runnable {
         translatorRegistry.registerTranslator(new ProtocolBeta13To11());
         translatorRegistry.registerTranslator(new ProtocolBeta11To10());
         translatorRegistry.registerTranslator(new ProtocolBeta10To9());
+        translatorRegistry.registerTranslator(new ProtocolBeta9To8());
 
         // start tick-loop
         setupGlobalTask();
