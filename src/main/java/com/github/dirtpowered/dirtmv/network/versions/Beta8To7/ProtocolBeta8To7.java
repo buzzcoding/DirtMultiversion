@@ -1,0 +1,163 @@
+/*
+ * Copyright (c) 2020-2022 Dirt Powered
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package com.github.dirtpowered.dirtmv.network.versions.Beta8To7;
+
+import com.github.dirtpowered.dirtmv.data.MinecraftVersion;
+import com.github.dirtpowered.dirtmv.data.protocol.PacketData;
+import com.github.dirtpowered.dirtmv.data.protocol.Type;
+import com.github.dirtpowered.dirtmv.data.protocol.TypeHolder;
+import com.github.dirtpowered.dirtmv.data.translator.PacketDirection;
+import com.github.dirtpowered.dirtmv.data.translator.PacketTranslator;
+import com.github.dirtpowered.dirtmv.data.translator.ServerProtocol;
+import com.github.dirtpowered.dirtmv.data.utils.PacketUtil;
+import com.github.dirtpowered.dirtmv.network.server.ServerSession;
+
+public class ProtocolBeta8To7 extends ServerProtocol {
+
+    public ProtocolBeta8To7() {
+        super(MinecraftVersion.B1_3, MinecraftVersion.B1_2);
+    }
+
+    @Override
+    public void registerTranslators() {
+        // login
+        addTranslator(0x01, PacketDirection.TO_SERVER, new PacketTranslator() {
+
+            @Override
+            public PacketData translate(ServerSession session, PacketData data) {
+
+                return PacketUtil.createPacket(0x01, new TypeHolder[]{
+                        set(Type.INT, 7),
+                        data.read(1),
+                        data.read(2),
+                        data.read(3),
+                        data.read(4),
+                });
+            }
+        });
+        
+        // entity equipment
+        addTranslator(0x05, PacketDirection.TO_CLIENT, new PacketTranslator() {
+
+            @Override
+            public PacketData translate(ServerSession session, PacketData data) {
+
+                return PacketUtil.createPacket(0x05, new TypeHolder[]{
+                		data.read(0),
+                		data.read(1),
+                		data.read(2),
+                		set(Type.INT, 0),
+                });
+            }
+        });
+        
+        // player block placement, TODO: Translate this
+        addTranslator(0x0F, PacketDirection.TO_SERVER, new PacketTranslator() {
+
+            @Override
+            public PacketData translate(ServerSession session, PacketData data) {
+
+                return data;
+            }
+        });
+        
+        // pickup spawn
+        addTranslator(0x15, PacketDirection.TO_CLIENT, new PacketTranslator() {
+
+            @Override
+            public PacketData translate(ServerSession session, PacketData data) {
+
+                return PacketUtil.createPacket(0x15, new TypeHolder[]{
+                		data.read(0),
+                		data.read(1),
+                		data.read(2),
+                		set(Type.INT, 0),
+                		data.read(4),
+                		data.read(5),
+                		data.read(6),
+                		data.read(7),
+                		data.read(8),
+                });
+            }
+        });
+        
+        // mob spawn, TODO: translate INSANITY (aka metadata)
+        addTranslator(0x18, PacketDirection.TO_CLIENT, new PacketTranslator() {
+
+            @Override
+            public PacketData translate(ServerSession session, PacketData data) {
+
+            	return cancel();
+                /*return PacketUtil.createPacket(0x18, new TypeHolder[]{
+                		data.read(0),
+                		data.read(1),
+                		data.read(2),
+                		data.read(3),
+                		data.read(4),
+                		data.read(5),
+                		data.read(6),
+                		set(Type.V1_3B_METADATA, null),
+                });*/
+            }
+        });
+        
+        // entity metadata, TODO: translate INSANITY (aka metadata)
+        addTranslator(0x28, PacketDirection.TO_CLIENT, new PacketTranslator() {
+
+            @Override
+            public PacketData translate(ServerSession session, PacketData data) {
+
+            	return cancel();
+                /*return PacketUtil.createPacket(0x18, new TypeHolder[]{
+                		data.read(0),
+                		set(Type.V1_3B_METADATA, null),
+                });*/
+            }
+        });
+        
+        // set slot, TODO: figure out why reading the short returns a null
+        addTranslator(0x67, PacketDirection.TO_CLIENT, new PacketTranslator() {
+
+            @Override
+            public PacketData translate(ServerSession session, PacketData data) {
+            	
+            	return cancel();
+            	/*if (data.read(Type.SHORT, 2) == -1) {
+            		return PacketUtil.createPacket(0x67, new TypeHolder[]{
+                    		data.read(0),
+                    		data.read(1),
+                    		data.read(2),
+            		});
+            	} else {
+	                return PacketUtil.createPacket(0x67, new TypeHolder[]{
+	                		data.read(0),
+	                		data.read(1),
+	                		data.read(2),
+	                		data.read(3),
+	                		set(Type.SHORT, (short) data.read(Type.SHORT, 4)),
+	                });
+            	}*/
+            }
+        });
+    }
+}

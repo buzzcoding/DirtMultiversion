@@ -33,6 +33,7 @@ import org.pmw.tinylog.Logger;
 import com.github.dirtpowered.dirtmv.api.Configuration;
 import com.github.dirtpowered.dirtmv.config.YamlConfig;
 import com.github.dirtpowered.dirtmv.data.MinecraftVersion;
+import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_0.V1_0BProtocol;
 import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_2.V1_2BProtocol;
 import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_3.V1_3BProtocol;
 import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_4.V1_4BProtocol;
@@ -60,6 +61,7 @@ import com.github.dirtpowered.dirtmv.network.versions.Beta11To10.ProtocolBeta11T
 import com.github.dirtpowered.dirtmv.network.versions.Beta13To11.ProtocolBeta13To11;
 import com.github.dirtpowered.dirtmv.network.versions.Beta14To13.ProtocolBeta14To13;
 import com.github.dirtpowered.dirtmv.network.versions.Beta17To14.ProtocolBeta17to14;
+import com.github.dirtpowered.dirtmv.network.versions.Beta8To7.ProtocolBeta8To7;
 import com.github.dirtpowered.dirtmv.network.versions.Beta9To8.ProtocolBeta9To8;
 import com.github.dirtpowered.dirtmv.network.versions.Release22To17.ProtocolRelease22To17;
 import com.github.dirtpowered.dirtmv.network.versions.Release23To22.ProtocolRelease23To22;
@@ -106,6 +108,7 @@ public class DirtMultiVersion implements Runnable {
         sessionRegistry = new SessionRegistry();
 
         // register supported protocols
+        ProtocolRegistry.registerProtocol(MinecraftVersion.B1_0, new V1_0BProtocol());
         ProtocolRegistry.registerProtocol(MinecraftVersion.B1_2, new V1_2BProtocol());
         ProtocolRegistry.registerProtocol(MinecraftVersion.B1_3, new V1_3BProtocol());
         ProtocolRegistry.registerProtocol(MinecraftVersion.B1_4, new V1_4BProtocol());
@@ -148,6 +151,7 @@ public class DirtMultiVersion implements Runnable {
         translatorRegistry.registerTranslator(new ProtocolBeta11To10());
         translatorRegistry.registerTranslator(new ProtocolBeta10To9());
         translatorRegistry.registerTranslator(new ProtocolBeta9To8());
+        translatorRegistry.registerTranslator(new ProtocolBeta8To7());
 
         // start tick-loop
         setupGlobalTask();
