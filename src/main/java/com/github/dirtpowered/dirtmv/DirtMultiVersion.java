@@ -33,7 +33,7 @@ import org.pmw.tinylog.Logger;
 import com.github.dirtpowered.dirtmv.api.Configuration;
 import com.github.dirtpowered.dirtmv.config.YamlConfig;
 import com.github.dirtpowered.dirtmv.data.MinecraftVersion;
-import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_0.V1_0BProtocol;
+import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_1.V1_1BProtocol;
 import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_2.V1_2BProtocol;
 import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_3.V1_3BProtocol;
 import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_4.V1_4BProtocol;
@@ -108,7 +108,7 @@ public class DirtMultiVersion implements Runnable {
         sessionRegistry = new SessionRegistry();
 
         // register supported protocols
-        ProtocolRegistry.registerProtocol(MinecraftVersion.B1_0, new V1_0BProtocol());
+        ProtocolRegistry.registerProtocol(MinecraftVersion.B1_1, new V1_1BProtocol());
         ProtocolRegistry.registerProtocol(MinecraftVersion.B1_2, new V1_2BProtocol());
         ProtocolRegistry.registerProtocol(MinecraftVersion.B1_3, new V1_3BProtocol());
         ProtocolRegistry.registerProtocol(MinecraftVersion.B1_4, new V1_4BProtocol());

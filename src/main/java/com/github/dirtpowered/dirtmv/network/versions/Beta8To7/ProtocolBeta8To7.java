@@ -26,6 +26,7 @@ import com.github.dirtpowered.dirtmv.data.MinecraftVersion;
 import com.github.dirtpowered.dirtmv.data.protocol.PacketData;
 import com.github.dirtpowered.dirtmv.data.protocol.Type;
 import com.github.dirtpowered.dirtmv.data.protocol.TypeHolder;
+import com.github.dirtpowered.dirtmv.data.protocol.objects.WatchableObject;
 import com.github.dirtpowered.dirtmv.data.translator.PacketDirection;
 import com.github.dirtpowered.dirtmv.data.translator.PacketTranslator;
 import com.github.dirtpowered.dirtmv.data.translator.ServerProtocol;
@@ -35,7 +36,7 @@ import com.github.dirtpowered.dirtmv.network.server.ServerSession;
 public class ProtocolBeta8To7 extends ServerProtocol {
 
     public ProtocolBeta8To7() {
-        super(MinecraftVersion.B1_3, MinecraftVersion.B1_2);
+        super(MinecraftVersion.B1_2, MinecraftVersion.B1_1);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class ProtocolBeta8To7 extends ServerProtocol {
             @Override
             public PacketData translate(ServerSession session, PacketData data) {
 
-                return data;
+                return cancel();
             }
         });
         
@@ -91,7 +92,8 @@ public class ProtocolBeta8To7 extends ServerProtocol {
                 		data.read(0),
                 		data.read(1),
                 		data.read(2),
-                		set(Type.INT, 0),
+                		set(Type.SHORT, (short) 0),
+                		data.read(3),
                 		data.read(4),
                 		data.read(5),
                 		data.read(6),
@@ -101,14 +103,13 @@ public class ProtocolBeta8To7 extends ServerProtocol {
             }
         });
         
-        // mob spawn, TODO: translate INSANITY (aka metadata)
+        // mob spawn
         addTranslator(0x18, PacketDirection.TO_CLIENT, new PacketTranslator() {
 
             @Override
             public PacketData translate(ServerSession session, PacketData data) {
 
-            	return cancel();
-                /*return PacketUtil.createPacket(0x18, new TypeHolder[]{
+                return PacketUtil.createPacket(0x18, new TypeHolder[]{
                 		data.read(0),
                 		data.read(1),
                 		data.read(2),
@@ -116,47 +117,39 @@ public class ProtocolBeta8To7 extends ServerProtocol {
                 		data.read(4),
                 		data.read(5),
                 		data.read(6),
-                		set(Type.V1_3B_METADATA, null),
-                });*/
+                		set(Type.V1_3B_METADATA, new WatchableObject[] {}),
+                });
             }
         });
         
-        // entity metadata, TODO: translate INSANITY (aka metadata)
+        // entity metadata
         addTranslator(0x28, PacketDirection.TO_CLIENT, new PacketTranslator() {
 
             @Override
             public PacketData translate(ServerSession session, PacketData data) {
 
-            	return cancel();
-                /*return PacketUtil.createPacket(0x18, new TypeHolder[]{
+                return PacketUtil.createPacket(0x18, new TypeHolder[]{
                 		data.read(0),
-                		set(Type.V1_3B_METADATA, null),
-                });*/
+                		set(Type.V1_3B_METADATA, new WatchableObject[] {}),
+                });
             }
         });
         
-        // set slot, TODO: figure out why reading the short returns a null
+        // set slot
         addTranslator(0x67, PacketDirection.TO_CLIENT, new PacketTranslator() {
 
             @Override
             public PacketData translate(ServerSession session, PacketData data) {
+            	Short uses = null;
+            	if (data.read(4) != null) uses = (short) data.read(Type.BYTE, 4);
             	
-            	return cancel();
-            	/*if (data.read(Type.SHORT, 2) == -1) {
-            		return PacketUtil.createPacket(0x67, new TypeHolder[]{
-                    		data.read(0),
-                    		data.read(1),
-                    		data.read(2),
-            		});
-            	} else {
-	                return PacketUtil.createPacket(0x67, new TypeHolder[]{
-	                		data.read(0),
-	                		data.read(1),
-	                		data.read(2),
-	                		data.read(3),
-	                		set(Type.SHORT, (short) data.read(Type.SHORT, 4)),
-	                });
-            	}*/
+                return PacketUtil.createPacket(0x67, new TypeHolder[]{
+                		data.read(0),
+                		data.read(1),
+                		data.read(2),
+                		data.read(3),
+                		set(Type.SHORT, uses),
+                });
             }
         });
     }

@@ -45,11 +45,11 @@ public class ItemArrayDataType extends DataType<ItemStack[]> {
 
     @Override
     public ItemStack[] read(PacketInput packetInput) throws IOException {
-        short length = packetInput.readShort();
+        int length = packetInput.readUnsignedShort();
 
         ItemStack[] objArray = new ItemStack[length];
 
-        for (short i = 0; i < length; i++) {
+        for (int i = 0; i < length; i++) {
             objArray[i] = (ItemStack) childInstruction.read(packetInput);
         }
         return objArray;

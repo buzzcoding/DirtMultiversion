@@ -20,13 +20,13 @@
  * SOFTWARE.
  */
 
-package com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_0;
+package com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_1;
 
 import com.github.dirtpowered.dirtmv.data.protocol.BaseProtocol;
 import com.github.dirtpowered.dirtmv.data.protocol.DataType;
 import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_3.V1_3BProtocol;
 
-public class V1_0BProtocol extends BaseProtocol {
+public class V1_1BProtocol extends BaseProtocol {
 
     @Override
     public void registerPackets() {

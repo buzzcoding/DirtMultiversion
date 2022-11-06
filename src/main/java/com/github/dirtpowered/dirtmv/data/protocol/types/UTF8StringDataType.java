@@ -39,8 +39,8 @@ public class UTF8StringDataType extends DataType<String> {
 
     @Override
     public String read(PacketInput packetInput) {
-        int stringLength = packetInput.readShort();
-        Preconditions.checkArgument(stringLength < 32767, "String too big");
+        int stringLength = packetInput.readUnsignedShort();
+        Preconditions.checkArgument(stringLength < 32767, "String too big (" + stringLength + " characters)");
 
         byte[] bytes = packetInput.readBytes(stringLength);
 
