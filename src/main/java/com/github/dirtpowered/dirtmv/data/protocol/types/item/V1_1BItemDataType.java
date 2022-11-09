@@ -20,43 +20,45 @@
  * SOFTWARE.
  */
 
-package com.github.dirtpowered.dirtmv.data.protocol.types;
+package com.github.dirtpowered.dirtmv.data.protocol.types.item;
 
 import com.github.dirtpowered.dirtmv.data.protocol.DataType;
 import com.github.dirtpowered.dirtmv.data.protocol.Type;
 import com.github.dirtpowered.dirtmv.data.protocol.TypeHolder;
 import com.github.dirtpowered.dirtmv.data.protocol.io.model.PacketInput;
 import com.github.dirtpowered.dirtmv.data.protocol.io.model.PacketOutput;
-import com.google.common.base.Preconditions;
+import com.github.dirtpowered.dirtmv.data.protocol.objects.ItemStack;
 
-public class StringDataType extends DataType<String> {
+public class V1_1BItemDataType extends DataType<ItemStack> {
 
-    public StringDataType() {
-        super(Type.STRING);
+    public V1_1BItemDataType() {
+        super(Type.V1_1B_ITEM);
     }
 
     @Override
-    public String read(PacketInput packetInput) {
-        int stringLength = packetInput.readUnsignedShort();
-        Preconditions.checkArgument(stringLength < 32767, "String too big");
+    public ItemStack read(PacketInput packetInput) {
+        int itemId = packetInput.readShort();
 
-        StringBuilder sb = new StringBuilder();
+        if (itemId >= 0) {
+            int amount = packetInput.readByte();
+            int data = packetInput.readByte();
 
-        for (int i = 0; i < stringLength; i++) {
-            String s = String.valueOf(packetInput.readChar());
-            sb.append(s);
+            return new ItemStack(itemId, amount, data, null);
         }
 
-        return sb.toString();
+        return null;
     }
 
     @Override
     public void write(TypeHolder typeHolder, PacketOutput packetOutput) {
-        String string = (String) typeHolder.getObject();
-        packetOutput.writeShort(string.length());
+        ItemStack itemStack = (ItemStack) typeHolder.getObject();
 
-        for (char c : string.toCharArray()) {
-            packetOutput.writeChar(c);
+        if (itemStack == null) {
+            packetOutput.writeShort(-1);
+        } else {
+            packetOutput.writeShort(itemStack.getItemId());
+            packetOutput.writeByte(itemStack.getAmount());
+            packetOutput.writeByte(itemStack.getData());
         }
     }
 }

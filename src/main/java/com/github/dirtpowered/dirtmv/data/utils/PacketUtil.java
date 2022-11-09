@@ -76,11 +76,7 @@ public class PacketUtil {
         String packetMapping = PreNettyPacketNames.getPacketName(packetId);
         String protocolName = protocol.getClass().getSimpleName();
 
-        try {
-        	Preconditions.checkNotNull(parts, "Unknown packet id %s (%s) in protocol %s", packetId, packetMapping, protocolName);
-        } catch (NullPointerException e) {
-        	return new PacketData(-1);
-        }
+        Preconditions.checkNotNull(parts, "Unknown packet id %s (%s) in protocol %s", packetId, packetMapping, protocolName);
 
         TypeHolder[] typeHolders = new TypeHolder[parts.length];
 
@@ -88,13 +84,7 @@ public class PacketUtil {
 
         while (i < parts.length) {
             DataType dataType = parts[i];
-            try {
-            	typeHolders[i] = new TypeHolder(dataType.getType(), dataType.read(buffer));
-            } catch (Exception e) {
-            	System.out.println("Caught exception on packet " + packetId + ":");
-            	e.printStackTrace();
-            	return new PacketData(-1);
-            }
+            typeHolders[i] = new TypeHolder(dataType.getType(), dataType.read(buffer));
             i++;
         }
 

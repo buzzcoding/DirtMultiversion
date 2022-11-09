@@ -22,6 +22,10 @@
 
 package com.github.dirtpowered.dirtmv.data.protocol;
 
+import java.io.IOException;
+import java.util.UUID;
+
+import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_1.V1_1BProtocol;
 import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_3.V1_3BProtocol;
 import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_8.V1_8BProtocol;
 import com.github.dirtpowered.dirtmv.data.protocol.definitions.R1_0.V1_0RProtocol;
@@ -51,10 +55,8 @@ import com.github.dirtpowered.dirtmv.data.protocol.objects.V1_8Chunk;
 import com.github.dirtpowered.dirtmv.data.protocol.objects.V1_8ChunkBulk;
 import com.github.dirtpowered.dirtmv.data.protocol.objects.WatchableObject;
 import com.github.dirtpowered.dirtmv.data.protocol.objects.tablist.TabListEntry;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 
-import java.io.IOException;
-import java.util.UUID;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 
 public class Type {
     public static final TypeObject<Byte> BYTE = new TypeObject<>(Byte.class, new TypeHandler() {
@@ -197,6 +199,13 @@ public class Type {
         }
     });
 
+    public static final TypeObject<ItemStack[]> V1_1B_ITEM_ARRAY = new TypeObject<>(ItemStack[].class, new TypeHandler() {
+        @Override
+        public void handle(TypeHolder holder, PacketOutput packetOutput) throws IOException {
+            V1_1BProtocol.ITEM_ARRAY.write(holder, packetOutput);
+        }
+    });
+
     public static final TypeObject<ItemStack[]> V1_0R_ITEM_ARRAY = new TypeObject<>(ItemStack[].class, new TypeHandler() {
         @Override
         public void handle(TypeHolder holder, PacketOutput packetOutput) throws IOException {
@@ -250,6 +259,13 @@ public class Type {
         @Override
         public void handle(TypeHolder holder, PacketOutput packetOutput) throws IOException {
             V1_3BProtocol.ITEM.write(holder, packetOutput);
+        }
+    });
+
+    public static final TypeObject<ItemStack> V1_1B_ITEM = new TypeObject<>(ItemStack.class, new TypeHandler() {
+        @Override
+        public void handle(TypeHolder holder, PacketOutput packetOutput) throws IOException {
+            V1_1BProtocol.ITEM.write(holder, packetOutput);
         }
     });
 

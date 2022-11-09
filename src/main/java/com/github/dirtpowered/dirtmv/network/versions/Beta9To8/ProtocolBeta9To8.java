@@ -55,25 +55,5 @@ public class ProtocolBeta9To8 extends ServerProtocol {
                 });
             }
         });
-        
-        // bed click
-        addTranslator(0x11, PacketDirection.TO_SERVER, new PacketTranslator() {
-
-            @Override
-            public PacketData translate(ServerSession session, PacketData data) {
-
-                return cancel();
-            }
-        });
-        
-        // stance update
-        addTranslator(0x1B, PacketDirection.TO_SERVER, new PacketTranslator() {
-
-            @Override
-            public PacketData translate(ServerSession session, PacketData data) {
-
-                return cancel();
-            }
-        });
     }
 }
