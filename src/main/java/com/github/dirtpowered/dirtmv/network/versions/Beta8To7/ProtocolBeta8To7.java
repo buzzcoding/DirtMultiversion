@@ -198,8 +198,7 @@ public class ProtocolBeta8To7 extends ServerProtocol {
 
             @Override
             public PacketData translate(ServerSession session, PacketData data) {
-            	return cancel();
-                /*V1_3BMultiBlockArray blocks = data.read(Type.V1_3BMULTIBLOCK_ARRAY, 2);
+                V1_3BMultiBlockArray blocks = data.read(Type.V1_3BMULTIBLOCK_ARRAY, 2);
                 
                 for (int i = 0; i < blocks.getSize(); i++) {
                 	if (blocks.getTypesArray()[i] == 18) {
@@ -211,7 +210,7 @@ public class ProtocolBeta8To7 extends ServerProtocol {
                 		data.read(0),
                 		data.read(1),
                 		set(Type.V1_3BMULTIBLOCK_ARRAY, blocks)
-                });*/
+                });
             }
         });
         
@@ -220,8 +219,7 @@ public class ProtocolBeta8To7 extends ServerProtocol {
 
             @Override
             public PacketData translate(ServerSession session, PacketData data) {
-            	return cancel();
-            	/*byte type = data.read(Type.BYTE, 3);
+            	byte type = data.read(Type.BYTE, 3);
             	byte metadata = data.read(Type.BYTE, 4);
             	
             	if (type == 18) {
@@ -234,7 +232,7 @@ public class ProtocolBeta8To7 extends ServerProtocol {
                 		data.read(2),
                 		data.read(3),
                 		set(Type.BYTE, metadata)
-                });*/
+                });
             }
         });
 
@@ -270,12 +268,6 @@ public class ProtocolBeta8To7 extends ServerProtocol {
 	                                
 	                                chunkData[metaindex] = (byte) metadata;
                                 }
-                                
-	                                /*System.out.println("(" + index + ") Data: " + BtoB(blockId)
-	                                	+ " " + a(index, bytelen, chunkData)
-	                                	+ " " + a(index, bytelen + nibblelen, chunkData)
-	                                	+ " " + a(index, bytelen + nibblelen + nibblelen, chunkData));
-                                }*;*/
                             } catch (ArrayIndexOutOfBoundsException ignored) {
                             }
                         }
@@ -293,21 +285,5 @@ public class ProtocolBeta8To7 extends ServerProtocol {
 
     private int getBlockIndexAt(int x, int y, int z) {
         return x << 11 | z << 7 | y;
-    }
-    
-    private String BtoB(byte b) {
-    	return Integer.toBinaryString(b & 0xFF);
-    }
-    
-    private String a(int index, int b, byte[] chunkData) {
-    	int bite = chunkData[index + b] & 0xFF;
-    	
-    	if (index % 2 != 1) { // even, first half
-    		bite = (bite & 0x11110000) >> 4;
-    	} else { // odd, second half
-    		bite = bite & 0x00001111;
-    	}
-    	
-		return Integer.toBinaryString(bite);
     }
 }
