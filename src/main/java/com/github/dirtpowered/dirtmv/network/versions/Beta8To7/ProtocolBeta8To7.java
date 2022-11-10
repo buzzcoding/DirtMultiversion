@@ -65,29 +65,12 @@ public class ProtocolBeta8To7 extends ServerProtocol {
 
             @Override
             public PacketData translate(ServerSession session, PacketData data) {
-            	Integer type = data.read(Type.INT, 0);
-            	ItemStack[] items = data.read(Type.V1_1B_ITEM_ARRAY, 1);
-            	
-            	// Convert separated player inventory sections to 1.2's combined inventory
-            	int add;
-            	switch(type) {
-            		case -3: // Crafting
-            			add = 0;
-            			break;
-            		case -2: // Armor
-            			add = 5;
-            			break;
-            		default: // Main inventory section
-            			add = 9;
-            	}
-            	
-            	for (ItemStack item: items) {
-            		item.setAmount(item.getAmount() + add);
-            	}
 
-                return PacketUtil.createPacket(0x68, new TypeHolder[]{
-                		set(Type.BYTE, (byte) 0),
-                		data.read(1)
+                return PacketUtil.createPacket(0x05, new TypeHolder[]{
+                		data.read(0),
+                		data.read(1),
+                		data.read(2),
+                		set(Type.SHORT, (short) 0)
                 });
             }
         });
@@ -189,6 +172,19 @@ public class ProtocolBeta8To7 extends ServerProtocol {
                 		data.read(0),
                 		data.read(1),
                 		set(Type.V1_3B_ITEM, item)
+                });
+            }
+        });
+        
+        // window items
+        addTranslator(0x68, PacketDirection.TO_CLIENT, new PacketTranslator() {
+
+            @Override
+            public PacketData translate(ServerSession session, PacketData data) {
+            	
+                return PacketUtil.createPacket(0x68, new TypeHolder[]{
+                		set(Type.BYTE, data.read(Type.INT, 0).byteValue()),
+                		data.read(1)
                 });
             }
         });

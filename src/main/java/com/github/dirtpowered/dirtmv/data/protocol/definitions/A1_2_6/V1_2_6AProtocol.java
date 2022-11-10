@@ -20,25 +20,18 @@
  * SOFTWARE.
  */
 
-package com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_1;
+package com.github.dirtpowered.dirtmv.data.protocol.definitions.A1_2_6;
 
 import com.github.dirtpowered.dirtmv.data.protocol.BaseProtocol;
 import com.github.dirtpowered.dirtmv.data.protocol.DataType;
 import com.github.dirtpowered.dirtmv.data.protocol.Type;
+import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_1.V1_1BProtocol;
 import com.github.dirtpowered.dirtmv.data.protocol.definitions.B1_3.V1_3BProtocol;
 import com.github.dirtpowered.dirtmv.data.protocol.objects.ItemStack;
 import com.github.dirtpowered.dirtmv.data.protocol.types.ItemArrayDataType;
 import com.github.dirtpowered.dirtmv.data.protocol.types.item.V1_1BItemDataType;
 
-public class V1_1BProtocol extends BaseProtocol {
-    public static final DataType<ItemStack> ITEM;
-    public static final DataType<ItemStack[]> ITEM_ARRAY;
-
-    static {
-        // custom instructions
-        ITEM = new V1_1BItemDataType();
-        ITEM_ARRAY = new ItemArrayDataType(Type.V1_1B_ITEM_ARRAY, ITEM);
-    }
+public class V1_2_6AProtocol extends BaseProtocol {
 
     @Override
     public void registerPackets() {
@@ -47,10 +40,10 @@ public class V1_1BProtocol extends BaseProtocol {
         dataTypes[2] = new DataType[]{UTF8_STRING};
         dataTypes[3] = new DataType[]{UTF8_STRING};
         dataTypes[4] = new DataType[]{LONG};
-        dataTypes[5] = new DataType[]{INT, SHORT, SHORT};
+        dataTypes[5] = new DataType[]{INT, V1_3BProtocol.ITEM_ARRAY};
         dataTypes[6] = new DataType[]{INT, INT, INT};
         dataTypes[7] = new DataType[]{INT, INT, BYTE};
-        dataTypes[8] = new DataType[]{SHORT};
+        dataTypes[8] = new DataType[]{BYTE};
         dataTypes[9] = new DataType[]{};
         dataTypes[10] = new DataType[]{BYTE};
         dataTypes[11] = new DataType[]{DOUBLE, DOUBLE, DOUBLE, DOUBLE, BYTE};
@@ -58,7 +51,8 @@ public class V1_1BProtocol extends BaseProtocol {
         dataTypes[13] = new DataType[]{DOUBLE, DOUBLE, DOUBLE, DOUBLE, FLOAT, FLOAT, BYTE};
         dataTypes[14] = new DataType[]{BYTE, INT, BYTE, INT, BYTE};
         dataTypes[15] = new DataType[]{SHORT, INT, BYTE, INT, BYTE};
-        dataTypes[16] = new DataType[]{SHORT};
+        dataTypes[16] = new DataType[]{INT, SHORT};
+        dataTypes[17] = new DataType[]{SHORT, BYTE, SHORT};
         dataTypes[18] = new DataType[]{INT, BYTE};
         dataTypes[20] = new DataType[]{INT, UTF8_STRING, INT, INT, INT, BYTE, BYTE, SHORT};
         dataTypes[21] = new DataType[]{INT, SHORT, BYTE, INT, INT, INT, BYTE, BYTE, BYTE};
@@ -78,15 +72,8 @@ public class V1_1BProtocol extends BaseProtocol {
         dataTypes[51] = new DataType[]{V1_3BProtocol.CHUNK};
         dataTypes[52] = new DataType[]{INT, INT, V1_3BProtocol.MULTIBLOCK_ARRAY};
         dataTypes[53] = new DataType[]{INT, BYTE, INT, BYTE, BYTE};
+        dataTypes[59] = new DataType[]{INT, SHORT, INT, COMPOUND_TAG};
         dataTypes[60] = new DataType[]{DOUBLE, DOUBLE, DOUBLE, FLOAT, V1_3BProtocol.POSITION_ARRAY};
-        dataTypes[100] = new DataType[]{BYTE, BYTE, UTF8_STRING, BYTE};
-        dataTypes[101] = new DataType[]{BYTE};
-        dataTypes[102] = new DataType[]{BYTE, SHORT, BYTE, SHORT, V1_1BProtocol.ITEM};
-        dataTypes[103] = new DataType[]{BYTE, SHORT, V1_1BProtocol.ITEM};
-        dataTypes[104] = new DataType[]{BYTE, V1_3BProtocol.ITEM_ARRAY};
-        dataTypes[105] = new DataType[]{BYTE, SHORT, SHORT};
-        dataTypes[106] = new DataType[]{BYTE, SHORT, BYTE};
-        dataTypes[130] = new DataType[]{INT, SHORT, INT, UTF8_STRING, UTF8_STRING, UTF8_STRING, UTF8_STRING};
         dataTypes[255] = new DataType[]{UTF8_STRING};
     }
 }

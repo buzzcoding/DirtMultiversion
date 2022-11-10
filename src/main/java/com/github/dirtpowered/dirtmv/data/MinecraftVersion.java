@@ -26,6 +26,7 @@ import lombok.Getter;
 
 @Getter
 public enum MinecraftVersion {
+    A1_2_6(6, false, "a1.2.6"),
     B1_1(7, false, "b1.1"),
     B1_2(8, false, "b1.2"), //TODO: 1.1_02
     B1_3(9, false, "b1.3"),
